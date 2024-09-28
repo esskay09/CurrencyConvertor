@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.config.JvmTarget
 plugins {
     alias(libs.plugins.currencyconvertor.application)
     alias(libs.plugins.currencyconvertor.application.compose)
+    alias(libs.plugins.currencyconvertor.hilt)
 }
 
 android {
@@ -55,6 +56,10 @@ dependencies {
 
     implementation(projects.core.designsystem)
 
+    //to test
+
+    implementation(projects.core.network)
+
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3.adaptive)
     implementation(libs.androidx.compose.material3.adaptive.layout)
@@ -66,6 +71,9 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.coroutines.guava)
     implementation(libs.kotlinx.serialization.json)
+
+    ksp(libs.hilt.compiler)
+
 
     debugImplementation(libs.androidx.compose.ui.testManifest)
 //    debugImplementation(projects.uiTestHiltManifest)

@@ -1,4 +1,4 @@
-package com.example.courrencyconverter.ui.theme
+package com.example.currencyconvertor.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
