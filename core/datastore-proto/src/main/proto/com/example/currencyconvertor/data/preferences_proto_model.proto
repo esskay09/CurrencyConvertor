@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+import "com/example/currencyconvertor/data/network_fetch_time_stamps.proto";
+
+option java_package = "com.example.currencyconvertor.core.datastore";
+option java_multiple_files = true;
+
+message PreferencesProtoModel {
+    reserved 2;
+
+    NetworkFetchTimeStampsProtoModel networkFetchTimeStamps = 4;
+}
