@@ -7,6 +7,7 @@ import com.example.currencyconvertor.core.data.model.mapNetworkCurrenciesToEntit
 import com.example.currencyconvertor.core.database.dao.CurrencyDao
 import com.example.currencyconvertor.core.database.model.CurrencyEntity
 import com.example.currencyconvertor.core.database.model.asExternalModel
+import com.example.currencyconvertor.core.datastore.CurrencyPreferencesDataSource
 import com.example.currencyconvertor.core.model.Currency
 import com.example.currencyconvertor.core.network.CurrencyNetworkDataSource
 import kotlinx.coroutines.flow.Flow
@@ -15,11 +16,14 @@ import javax.inject.Inject
 
 class DefaultCurrenciesRepository @Inject constructor(
     private val currencyDao: CurrencyDao,
-    private val network: CurrencyNetworkDataSource
+    private val network: CurrencyNetworkDataSource,
+    private val preferencesDataSource: CurrencyPreferencesDataSource
 ) : CurrenciesRepository {
 
     override val currencies: Flow<List<Currency>> =
         currencyDao.getAllCurrencies().map { it.map(CurrencyEntity::asExternalModel) }
+
+    override val selectedBaseCurrency: Flow<String> = preferencesDataSource.selectedBaseCurrencyId
 
     override suspend fun syncWith(synchronizer: Synchronizer): Boolean =
         synchronizer.changeListSync(

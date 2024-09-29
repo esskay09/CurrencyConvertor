@@ -22,7 +22,7 @@ class DefaultExchangeRatesRepository @Inject constructor(
     private val preferencesDataSource: CurrencyPreferencesDataSource
 ) : ExchangeRatesRepository {
 
-    override val exchangeRates: Flow<List<ExchangeRate>> = preferencesDataSource.selectedCurrencyId
+    override val exchangeRates: Flow<List<ExchangeRate>> = preferencesDataSource.selectedBaseCurrencyId
         .flatMapLatest {
             currencyDao.getExchangeRates(it)
         }.map { rateList ->
@@ -39,7 +39,7 @@ class DefaultExchangeRatesRepository @Inject constructor(
             },
             timeStampUpdater = { timeStamp -> copy(exchangeRates = timeStamp) },
             updater = {
-                val baseCurrencyId = preferencesDataSource.selectedCurrencyId.first()
+                val baseCurrencyId = preferencesDataSource.selectedBaseCurrencyId.first()
                 val exchangeRates =
                     network.getExchangeRates(base = baseCurrencyId).asEntityList(baseCurrencyId)
                 currencyDao.insertExchangeRates(exchangeRates)

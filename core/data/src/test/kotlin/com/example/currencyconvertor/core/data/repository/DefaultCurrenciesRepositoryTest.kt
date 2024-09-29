@@ -46,6 +46,7 @@ class DefaultCurrenciesRepositoryTest {
         subject = DefaultCurrenciesRepository(
             currencyDao = currencyDao,
             network = network,
+            preferencesDataSource = preferences
         )
     }
 

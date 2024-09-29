@@ -47,7 +47,7 @@ class CurrencyPreferencesDataSource @Inject constructor(
         }
     }
 
-    val selectedCurrencyId: Flow<String> = preferences.data
+    val selectedBaseCurrencyId: Flow<String> = preferences.data
         .map { it.selectedBaseCurrencyId.ifEmpty { Constants.DEFAULT_BASE_CURRENCY } }
 
     suspend fun updateSelectedCurrencyId(currencyId: String) {
