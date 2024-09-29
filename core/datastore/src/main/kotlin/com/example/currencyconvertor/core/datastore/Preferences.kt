@@ -1,6 +1,7 @@
 package com.example.currencyconvertor.core.datastore
 
 data class Preferences(
+    val selectedBaseCurrencyId: String = "",
     val timeStamps: TimeStamps = TimeStamps(),
 ) {
     data class TimeStamps(
