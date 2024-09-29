@@ -12,16 +12,14 @@ class CurrencyPreferencesDataSource @Inject constructor(
     private val preferences: DataStore<PreferencesProtoModel>,
 ) {
 
-    suspend fun getNetworkFetchTimeStamps() = preferences.data
+    suspend fun getNetworkFetchTimeStamps(): Preferences.TimeStamps = preferences.data
         .map {
-            Preferences(
-                timeStamps = Preferences.TimeStamps(
-                    currencies = it.networkFetchTimeStamps.currenciesFetchTimeStamp,
-                    conversionRates = it.networkFetchTimeStamps.currencyRatesFetchTimeStamp,
-                )
+            Preferences.TimeStamps(
+                currencies = it.networkFetchTimeStamps.currenciesFetchTimeStamp,
+                conversionRates = it.networkFetchTimeStamps.currencyRatesFetchTimeStamp,
             )
         }
-        .firstOrNull() ?: Preferences()
+        .firstOrNull() ?: Preferences.TimeStamps()
 
 
     suspend fun updateNetworkFetchTimeStamps(update: (Preferences.TimeStamps) -> Preferences.TimeStamps) {
@@ -43,6 +41,7 @@ class CurrencyPreferencesDataSource @Inject constructor(
             }
         } catch (ioException: IOException) {
             Log.e("CurrencyPreferences", "Failed to update user preferences", ioException)
+            System.err.println("Failed to update user preferences: ${ioException.message}")
         }
     }
 }
