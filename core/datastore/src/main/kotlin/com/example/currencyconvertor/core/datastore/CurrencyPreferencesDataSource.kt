@@ -18,7 +18,7 @@ class CurrencyPreferencesDataSource @Inject constructor(
         .map {
             Preferences.TimeStamps(
                 currencies = it.networkFetchTimeStamps.currenciesFetchTimeStamp,
-                conversionRates = it.networkFetchTimeStamps.currencyRatesFetchTimeStamp,
+                exchangeRates = it.networkFetchTimeStamps.exchangeRatesFetchTimeStamp,
             )
         }
         .firstOrNull() ?: Preferences.TimeStamps()
@@ -31,13 +31,13 @@ class CurrencyPreferencesDataSource @Inject constructor(
                 val updateTimeStamps = update(
                     Preferences.TimeStamps(
                         currencies = currentTimeStamps.currenciesFetchTimeStamp,
-                        conversionRates = currentTimeStamps.currencyRatesFetchTimeStamp,
+                        exchangeRates = currentTimeStamps.exchangeRatesFetchTimeStamp,
                     ),
                 )
                 currentPreferences.copy {
                     networkFetchTimeStamps = networkFetchTimeStampsProtoModel {
                         currenciesFetchTimeStamp = updateTimeStamps.currencies
-                        currencyRatesFetchTimeStamp = updateTimeStamps.conversionRates
+                        exchangeRatesFetchTimeStamp = updateTimeStamps.exchangeRates
                     }
                 }
             }

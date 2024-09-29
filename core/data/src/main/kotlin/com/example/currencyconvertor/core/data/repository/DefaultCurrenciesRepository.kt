@@ -18,7 +18,7 @@ class DefaultCurrenciesRepository @Inject constructor(
     private val network: CurrencyNetworkDataSource
 ) : CurrenciesRepository {
 
-    override fun getCurrencies(): Flow<List<Currency>> =
+    override val currencies: Flow<List<Currency>> =
         currencyDao.getAllCurrencies().map { it.map(CurrencyEntity::asExternalModel) }
 
     override suspend fun syncWith(synchronizer: Synchronizer): Boolean =

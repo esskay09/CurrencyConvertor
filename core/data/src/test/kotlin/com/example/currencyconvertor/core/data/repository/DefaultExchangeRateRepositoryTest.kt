@@ -2,10 +2,10 @@ package com.example.currencyconvertor.core.data.repository
 
 import com.example.currencyconvertor.core.data.NetworkConstants
 import com.example.currencyconvertor.core.data.Synchronizer
-import com.example.currencyconvertor.core.data.model.mapNetworkCurrenciesToEntity
+import com.example.currencyconvertor.core.data.model.asEntityList
 import com.example.currencyconvertor.core.data.testdoubles.TestCurrencyDao
 import com.example.currencyconvertor.core.data.testdoubles.TestCurrencyNetworkDataSource
-import com.example.currencyconvertor.core.database.model.CurrencyEntity
+import com.example.currencyconvertor.core.database.model.ExchangeRateEntity
 import com.example.currencyconvertor.core.database.model.asExternalModel
 import com.example.currencyconvertor.core.datastore.CurrencyPreferencesDataSource
 import com.example.currencyconvertor.core.datastore.test.testPreferencesDataStore
@@ -21,15 +21,16 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 import kotlin.time.Duration.Companion.minutes
 
-class DefaultCurrenciesRepositoryTest {
+class DefaultExchangeRateRepositoryTest {
     private val testScope = TestScope(UnconfinedTestDispatcher())
 
-    private lateinit var subject: DefaultCurrenciesRepository
+    private lateinit var subject: DefaultExchangeRatesRepository
     private lateinit var currencyDao: TestCurrencyDao
     private lateinit var network: TestCurrencyNetworkDataSource
     private lateinit var preferences: CurrencyPreferencesDataSource
     private lateinit var synchronizer: Synchronizer
 
+    private val baseCurrency = "USD"
 
     @Before
     fun setup() {
@@ -43,20 +44,21 @@ class DefaultCurrenciesRepositoryTest {
         )
         synchronizer = TestSynchronizer(preferences)
 
-        subject = DefaultCurrenciesRepository(
+        subject = DefaultExchangeRatesRepository(
             currencyDao = currencyDao,
             network = network,
+            preferencesDataSource = preferences
         )
     }
 
     @Test
-    fun repository_currencies_stream_is_backed_by_currencies_dao() =
+    fun repository_exchange_rates_stream_is_backed_by_currencies_dao() =
         testScope.runTest {
             assertEquals(
-                currencyDao.getAllCurrencies()
+                currencyDao.getExchangeRates(baseCurrency)
                     .first()
-                    .map(CurrencyEntity::asExternalModel),
-                subject.currencies
+                    .map(ExchangeRateEntity::asExternalModel),
+                subject.exchangeRates
                     .first(),
             )
         }
@@ -64,15 +66,17 @@ class DefaultCurrenciesRepositoryTest {
     @Test
     fun repository_sync_pulls_from_network() =
         testScope.runTest {
-            val lastTimeStamp = synchronizer.getTimeStamps().currencies
+            val lastTimeStamp = synchronizer.getTimeStamps().exchangeRates
             subject.syncWith(synchronizer)
-            val newTimeStamp = synchronizer.getTimeStamps().currencies
-            val networkCurrencies = mapNetworkCurrenciesToEntity(network.getCurrencies())
-            val dbCurrencies = currencyDao.getAllCurrencies()
+            val newTimeStamp = synchronizer.getTimeStamps().exchangeRates
+
+
+            val networkRates = network.getExchangeRates(baseCurrency).asEntityList(baseCurrency)
+            val dbExchangeRates = currencyDao.getExchangeRates(baseCurrency)
                 .first()
             assertEquals(
-                networkCurrencies.map(CurrencyEntity::id),
-                dbCurrencies.map(CurrencyEntity::id),
+                networkRates.map(ExchangeRateEntity::id),
+                dbExchangeRates.map(ExchangeRateEntity::id),
             )
             assertTrue(newTimeStamp > lastTimeStamp)
         }
@@ -82,28 +86,28 @@ class DefaultCurrenciesRepositoryTest {
     fun repository_doesnt_pull_from_network_if_sync_is_not_needed() =
         testScope.runTest {
             synchronizer.updateTimeStamps {
-                copy(currencies = 0)
+                copy(exchangeRates = 0)
             }
             subject.syncWith(synchronizer)
 
-            val currencies = subject.currencies.first()
-            assert(currencies.isNotEmpty())
+            val rates = subject.exchangeRates.first()
+            assert(rates.isNotEmpty())
 
             val savedTimeStamp =
                 (Clock.System.now() - (NetworkConstants.DEFAULT_MINUTES_THRESHOLD - 2).minutes).toEpochMilliseconds()
             synchronizer.updateTimeStamps {
                 copy(
-                    currencies = savedTimeStamp
+                    exchangeRates = savedTimeStamp
                 )
             }
-            network.updateCurrencies("USD")
+            network.updateExchangeRates("USD")
             subject.syncWith(synchronizer)
 
-            val lastTimeStamp = synchronizer.getTimeStamps().currencies
-            val newCurrencies = subject.currencies.first()
+            val lastTimeStamp = synchronizer.getTimeStamps().exchangeRates
+            val newRates = subject.exchangeRates.first()
 
             assertEquals(savedTimeStamp, lastTimeStamp)
-            assert(newCurrencies.find { it.id == "USD" } != null)
+            assert(newRates.find { it.baseId == "USD" } != null)
         }
 
 }

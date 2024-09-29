@@ -17,18 +17,24 @@ class TestCurrencyNetworkDataSource @Inject constructor(
 ) : CurrencyNetworkDataSource {
 
     private var allCurrencies = networkJson.decodeFromString<Map<String, String>>(currenciesJson)
+    private var exchangeRatesNetwork = networkJson.decodeFromString<ExchangeRatesNetwork>(exchangeRatesJson)
 
-    override suspend fun getCurrencies(): Map<String, String> = withContext(ioDispatcher) {
-        allCurrencies
-    }
-    override suspend fun getExchangeRates(base: String): ExchangeRatesNetwork =
-        withContext(ioDispatcher) {
-            networkJson.decodeFromString<ExchangeRatesNetwork>(exchangeRatesJson)
-        }
+    override suspend fun getCurrencies(): Map<String, String> = allCurrencies
+
+    override suspend fun getExchangeRates(base: String): ExchangeRatesNetwork = exchangeRatesNetwork
+
 
     fun updateCurrencies(vararg removeIds: String) {
         allCurrencies = allCurrencies.filterNot {
             it.key in removeIds
         }
+    }
+
+    fun updateExchangeRates(vararg removeIds: String) {
+        exchangeRatesNetwork = exchangeRatesNetwork.copy(
+            rates = exchangeRatesNetwork.rates.filterKeys {
+                it !in removeIds
+            }
+        )
     }
 }

@@ -30,11 +30,11 @@ class CurrencyPreferencesDataSourceTest {
         subject.updateNetworkFetchTimeStamps { currentTimeStamps ->
             currentTimeStamps.copy(
                 currencies = 444,
-                conversionRates = 555,
+                exchangeRates = 555,
             )
         }
         assertTrue(subject.getNetworkFetchTimeStamps().currencies == 444L)
-        assertTrue(subject.getNetworkFetchTimeStamps().conversionRates == 555L)
+        assertTrue(subject.getNetworkFetchTimeStamps().exchangeRates == 555L)
     }
 
     @Test

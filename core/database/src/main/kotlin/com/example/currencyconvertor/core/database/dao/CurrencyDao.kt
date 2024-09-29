@@ -4,9 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
-import com.example.currencyconvertor.core.database.model.ConversionRateEntity
 import com.example.currencyconvertor.core.database.model.CurrencyEntity
-import com.example.currencyconvertor.core.database.model.CurrencyWithConversionRates
+import com.example.currencyconvertor.core.database.model.ExchangeRateEntity
 import kotlinx.coroutines.flow.Flow
 
 
@@ -29,15 +28,17 @@ interface CurrencyDao {
     }
 
     @Insert
-    suspend fun insertConversionRates(rates: List<ConversionRateEntity>)
+    suspend fun insertExchangeRates(rates: List<ExchangeRateEntity>)
 
     @Transaction
-    @Query("SELECT * FROM currency WHERE id = :baseId")
-    fun getConversionRates(baseId: String): Flow<CurrencyWithConversionRates?>
+    @Query("SELECT * FROM exchange_rate WHERE base_currency_id = :baseId")
+    fun getExchangeRates(baseId: String): Flow<List<ExchangeRateEntity>>
 
-    @Query("""
-        DELETE FROM conversion_rate
-        WHERE base_currency_id = :currencyId OR target_id = :currencyId
-    """)
-    suspend fun deleteConversationRates(currencyId: String)
+    @Query(
+        """
+        DELETE FROM exchange_rate
+        WHERE base_currency_id = :currencyId OR target_currency_id = :currencyId
+    """
+    )
+    suspend fun deleteExchangeRates(currencyId: String)
 }

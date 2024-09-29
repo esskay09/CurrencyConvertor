@@ -5,5 +5,5 @@ import com.example.currencyconvertor.core.model.Currency
 import kotlinx.coroutines.flow.Flow
 
 interface CurrenciesRepository: Syncable {
-    fun getCurrencies(): Flow<List<Currency>>
+    val currencies: Flow<List<Currency>>
 }

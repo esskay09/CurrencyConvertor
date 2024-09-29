@@ -4,14 +4,15 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.example.currencyconvertor.core.database.CurrencyDatabase
-import com.example.currencyconvertor.core.database.model.ConversionRateEntity
 import com.example.currencyconvertor.core.database.model.CurrencyEntity
+import com.example.currencyconvertor.core.database.model.ExchangeRateEntity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class CurrencyDaoTest {
 
@@ -85,30 +86,30 @@ class CurrencyDaoTest {
     @Test
     fun currencyDao_fetches_currency_rates_by_base_id_when_currency_does_not_exist() = runTest {
         val currencies = currencies()
-        val conversionRates = currencyRates()
+        val conversionRates = exchangeRates()
 
         currencyDao.updateCurrencies(currencies)
-        currencyDao.insertConversionRates(rates = conversionRates)
+        currencyDao.insertExchangeRates(rates = conversionRates)
 
-        val fetchedCurrencyWithRates = currencyDao.getConversionRates("NOCOUNTRY").first()
-        assertEquals(null, fetchedCurrencyWithRates)
+        val fetchedCurrencyWithRates = currencyDao.getExchangeRates("NOCOUNTRY").first()
+        assertEquals(emptyList(), fetchedCurrencyWithRates)
     }
 
     @Test
     fun currencyDao_fetches_currency_rates_by_base_id() = runTest {
         val currencies = currencies()
-        val conversionRates = currencyRates()
+        val exchangeRates = exchangeRates()
 
-        val baseCurrency = currencies.find { it.id == "USD" }!!
+        val baseCurrency = currencies.find { it.id == "USD" }!!.id
 
         currencyDao.updateCurrencies(currencies)
-        currencyDao.insertConversionRates(rates = conversionRates)
+        currencyDao.insertExchangeRates(rates = exchangeRates)
 
-        val fetchedCurrencyWithRates = currencyDao.getConversionRates(baseCurrency.id).first()
+        val fetchedCurrencyWithRates = currencyDao.getExchangeRates(baseCurrency).first()
 
-        assertEquals(baseCurrency, fetchedCurrencyWithRates?.base)
-        val expectedRateList = conversionRates.filter { it.baseCurrencyId == baseCurrency.id }
-        assertEquals(expectedRateList, fetchedCurrencyWithRates?.rates)
+        assertTrue (fetchedCurrencyWithRates.all { it.baseCurrencyId == baseCurrency })
+        val expectedRateList = exchangeRates.filter { it.baseCurrencyId == baseCurrency }
+        assertEquals(expectedRateList, fetchedCurrencyWithRates)
     }
 
     private fun currencies() = listOf(
@@ -130,61 +131,42 @@ class CurrencyDaoTest {
         ),
     )
 
-    private fun currencyRates() = listOf(
-        ConversionRateEntity(
+    private fun exchangeRates() = listOf(
+        ExchangeRateEntity(
             id = "USD_EUR",
             baseCurrencyId = "USD",
-            target = CurrencyEntity(
-                id = "EUR",
-                name = "Euro",
-            ),
+            targetCurrencyId = "EUR",
             rate = 0.85,
         ),
-        ConversionRateEntity(
+        ExchangeRateEntity(
             id = "USD_JPY",
             baseCurrencyId = "USD",
-            target = CurrencyEntity(
-                id = "JPY",
-                name = "Japanese Yen",
-            ),
+            targetCurrencyId = "JPY",
             rate = 110.0,
         ),
-        ConversionRateEntity(
+        ExchangeRateEntity(
             id = "USD_GBP",
             baseCurrencyId = "USD",
-            target = CurrencyEntity(
-                id = "GBP",
-                name = "British Pound",
-            ),
+            targetCurrencyId = "GBP",
             rate = 0.72,
         ),
-        ConversionRateEntity(
+        ExchangeRateEntity(
             id = "EUR_USD",
             baseCurrencyId = "EUR",
-            target = CurrencyEntity(
-                id = "USD",
-                name = "US Dollar",
-            ),
+            targetCurrencyId = "USD",
             rate = 1.18,
         ),
-        ConversionRateEntity(
+        ExchangeRateEntity(
             id = "EUR_JPY",
             baseCurrencyId = "EUR",
-            target = CurrencyEntity(
-                id = "JPY",
-                name = "Japanese Yen",
-            ),
+            targetCurrencyId = "JPY",
             rate = 129.41,
         ),
-        ConversionRateEntity(
+        ExchangeRateEntity(
             id = "EUR_GBP",
             baseCurrencyId = "EUR",
-            target = CurrencyEntity(
-                id = "GBP",
-                name = "British Pound",
-            ),
+            targetCurrencyId = "GBP",
             rate = 0.85,
         ),
-
-        )
+    )
 }

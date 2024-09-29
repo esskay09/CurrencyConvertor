@@ -25,7 +25,7 @@ class PreferencesSerializerTest {
         val expectedPreferences = preferencesProtoModel {
             networkFetchTimeStampsProtoModel {
                 currenciesFetchTimeStamp = 123
-                currencyRatesFetchTimeStamp = 456
+                exchangeRatesFetchTimeStamp = 456
             }
         }
         val outputStream = ByteArrayOutputStream()

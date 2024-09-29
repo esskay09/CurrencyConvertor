@@ -6,6 +6,6 @@ data class Preferences(
 ) {
     data class TimeStamps(
         val currencies: Long = 0,
-        val conversionRates: Long = 0,
+        val exchangeRates: Long = 0,
     )
 }

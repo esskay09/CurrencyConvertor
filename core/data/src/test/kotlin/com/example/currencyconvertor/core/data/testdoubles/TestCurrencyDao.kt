@@ -1,9 +1,8 @@
 package com.example.currencyconvertor.core.data.testdoubles
 
 import com.example.currencyconvertor.core.database.dao.CurrencyDao
-import com.example.currencyconvertor.core.database.model.ConversionRateEntity
 import com.example.currencyconvertor.core.database.model.CurrencyEntity
-import com.example.currencyconvertor.core.database.model.CurrencyWithConversionRates
+import com.example.currencyconvertor.core.database.model.ExchangeRateEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -13,7 +12,7 @@ import kotlinx.coroutines.flow.update
 class TestCurrencyDao : CurrencyDao {
 
     private val currencyEntitiesStateFlow = MutableStateFlow(emptyList<CurrencyEntity>())
-    private val ratesEntitiesStateFlow = MutableStateFlow(emptyList<ConversionRateEntity>())
+    private val ratesEntitiesStateFlow = MutableStateFlow(emptyList<ExchangeRateEntity>())
 
     override fun getAllCurrencies(): Flow<List<CurrencyEntity>> = currencyEntitiesStateFlow
 
@@ -33,27 +32,22 @@ class TestCurrencyDao : CurrencyDao {
         super.updateCurrencies(currencies)
     }
 
-    override suspend fun insertConversionRates(rates: List<ConversionRateEntity>) {
+    override suspend fun insertExchangeRates(rates: List<ExchangeRateEntity>) {
         ratesEntitiesStateFlow.update { oldValues ->
             (oldValues + rates).distinctBy(
-                ConversionRateEntity::id
+                ExchangeRateEntity::id
             )
         }
     }
 
-    override fun getConversionRates(baseId: String): Flow<CurrencyWithConversionRates?> {
-        return ratesEntitiesStateFlow.map { rates ->
-            val base = currencyEntitiesStateFlow.value.find { it.id == baseId } ?: return@map null
-            CurrencyWithConversionRates(
-                base = base,
-                rates = rates.filter { it.baseCurrencyId == baseId }
-            )
+    override fun getExchangeRates(baseId: String): Flow<List<ExchangeRateEntity>> =
+        ratesEntitiesStateFlow.map { rates ->
+            rates.filter { it.baseCurrencyId == baseId }
         }
-    }
 
-    override suspend fun deleteConversationRates(currencyId: String) {
+    override suspend fun deleteExchangeRates(currencyId: String) {
         ratesEntitiesStateFlow.update { rates ->
-            rates.filterNot { it.baseCurrencyId == currencyId || it.target.id == currencyId }
+            rates.filterNot { it.baseCurrencyId == currencyId || it.targetCurrencyId == currencyId }
         }
     }
 }
