@@ -50,11 +50,28 @@ class CurrencyPreferencesDataSource @Inject constructor(
     val selectedBaseCurrencyId: Flow<String> = preferences.data
         .map { it.selectedBaseCurrencyId.ifEmpty { Constants.DEFAULT_BASE_CURRENCY } }
 
-    suspend fun updateSelectedCurrencyId(currencyId: String) {
+
+    val selectedCurrencyId: Flow<String> = preferences.data
+        .map { it.selectedCurrencyId }
+
+    suspend fun updateSelectedBaseCurrencyId(currencyId: String) {
         try {
             preferences.updateData { currentPreferences ->
                 currentPreferences.copy {
                     selectedBaseCurrencyId = currencyId
+                }
+            }
+        } catch (ioException: IOException) {
+            Log.e("CurrencyPreferences", "Failed to update user preferences", ioException)
+            System.err.println("Failed to update user preferences: ${ioException.message}")
+        }
+    }
+
+    suspend fun updateSelectedCurrencyId(currencyId: String) {
+        try {
+            preferences.updateData { currentPreferences ->
+                currentPreferences.copy {
+                    selectedCurrencyId = currencyId
                 }
             }
         } catch (ioException: IOException) {

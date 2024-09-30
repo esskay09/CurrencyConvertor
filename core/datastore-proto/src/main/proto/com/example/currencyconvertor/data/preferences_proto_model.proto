@@ -10,4 +10,5 @@ message PreferencesProtoModel {
 
     NetworkFetchTimeStampsProtoModel networkFetchTimeStamps = 4;
     string selectedBaseCurrencyId = 5;
+    string selectedCurrencyId = 6;
 }

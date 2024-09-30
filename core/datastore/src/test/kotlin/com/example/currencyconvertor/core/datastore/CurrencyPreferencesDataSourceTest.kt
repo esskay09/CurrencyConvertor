@@ -46,8 +46,17 @@ class CurrencyPreferencesDataSourceTest {
     fun updating_base_currency_id_reflect_in_store() = testScope.runTest {
         subject.selectedBaseCurrencyId.test {
             assertEquals(awaitItem(), Constants.DEFAULT_BASE_CURRENCY)
-            subject.updateSelectedCurrencyId("INR")
+            subject.updateSelectedBaseCurrencyId("INR")
             assertEquals(awaitItem(), "INR")
+        }
+    }
+
+    @Test
+    fun updating_selected_currency_id_reflect_in_store() = testScope.runTest {
+        subject.selectedCurrencyId.test {
+            assertEquals(awaitItem(), "")
+            subject.updateSelectedCurrencyId("USD")
+            assertEquals(awaitItem(), "USD")
         }
     }
 }

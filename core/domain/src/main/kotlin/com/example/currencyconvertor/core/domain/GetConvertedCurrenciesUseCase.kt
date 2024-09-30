@@ -16,15 +16,15 @@ class GetConvertedCurrenciesUseCase @Inject constructor(
 ) {
 
     operator fun invoke(
-        selectedCurrency: Currency,
         amount: Double
     ): Flow<List<ConvertedCurrency>> = combine(
         currenciesRepository.currencies,
         exchangeRatesRepository.exchangeRates,
-        currenciesRepository.selectedBaseCurrency
-    ) { currencies, exchangeRates, baseCurrencyId ->
+        currenciesRepository.selectedBaseCurrency,
+        currenciesRepository.selectedCurrency
+    ) { currencies, exchangeRates, baseCurrencyId, selectedCurrency ->
 
-        if (currencies.isEmpty() || baseCurrencyId.isEmpty()) return@combine emptyList()
+        if (currencies.isEmpty() || baseCurrencyId.isEmpty() || selectedCurrency == null) return@combine emptyList()
 
         if (exchangeRates.isEmpty()) return@combine emptyConvertedList(
             currencies,

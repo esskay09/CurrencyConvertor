@@ -107,4 +107,20 @@ class DefaultCurrenciesRepositoryTest {
             assert(newCurrencies.find { it.id == "USD" } != null)
         }
 
+
+    @Test
+    fun repository_selected_currency_is_reflected() = testScope.runTest {
+        val currencyId = "USD"
+        currencyDao.updateCurrencies(
+            listOf(
+                CurrencyEntity(
+                    id = currencyId,
+                    name = "US Dollar"
+                )
+            )
+        )
+        subject.setSelectedCurrency(currencyId)
+        assertEquals(currencyId, subject.selectedCurrency.first()?.id)
+    }
+
 }

@@ -7,4 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface CurrenciesRepository : Syncable {
     val currencies: Flow<List<Currency>>
     val selectedBaseCurrency: Flow<String>
+    val selectedCurrency: Flow<Currency?>
+
+    suspend fun setSelectedCurrency(currencyId: String)
 }

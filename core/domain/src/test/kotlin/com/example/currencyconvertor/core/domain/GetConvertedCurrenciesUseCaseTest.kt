@@ -33,8 +33,9 @@ class GetConvertedCurrenciesUseCaseTest {
     fun whenNoCurrencies_emptyListIsReturned() = runTest {
         currenciesRepository.sendCurrencies(emptyList())
         ratesRepository.sendExchangeRates(emptyList())
+        currenciesRepository.setSelectedCurrency("USD")
         val convertedCurrencies =
-            useCase(amount = 1.0, selectedCurrency = Currency("USD", "US Dollar"))
+            useCase(amount = 1.0)
         assertTrue(convertedCurrencies.first().isEmpty())
     }
 
@@ -42,8 +43,10 @@ class GetConvertedCurrenciesUseCaseTest {
     fun whenNoRates_CurrencyListWithZeroValuesIsReturned() = runTest {
         currenciesRepository.sendCurrencies(currenciesTestData)
         ratesRepository.sendExchangeRates(emptyList())
+
+        currenciesRepository.setSelectedCurrency("USD")
         val convertedCurrencies =
-            useCase(amount = 0.0, selectedCurrency = Currency("USD", "US Dollar"))
+            useCase(amount = 0.0)
 
         assertTrue { convertedCurrencies.first().isNotEmpty() }
         assertTrue(convertedCurrencies.first().all { it.value == 0.0 })
@@ -53,8 +56,10 @@ class GetConvertedCurrenciesUseCaseTest {
     fun whenAmountIsZero_CurrencyListWithZeroValuesIsReturned() = runTest {
         currenciesRepository.sendCurrencies(currenciesTestData)
         ratesRepository.sendExchangeRates(exchangeRatesTestData)
+
+        currenciesRepository.setSelectedCurrency("USD")
         val convertedCurrencies =
-            useCase(amount = 0.0, selectedCurrency = Currency("USD", "US Dollar"))
+            useCase(amount = 0.0)
         assertTrue { convertedCurrencies.first().isNotEmpty() }
         assertTrue(convertedCurrencies.first().all { it.value == 0.0 })
     }
@@ -104,7 +109,9 @@ class GetConvertedCurrenciesUseCaseTest {
                 value = amount
             ),
         )
-        val convertedCurrencies = useCase(amount = amount, selectedCurrency = selectedCurrency)
+
+        currenciesRepository.setSelectedCurrency(selectedCurrency.id)
+        val convertedCurrencies = useCase(amount = amount)
 
         assertContentEquals(expected, convertedCurrencies.first())
     }
@@ -112,6 +119,7 @@ class GetConvertedCurrenciesUseCaseTest {
     @Test
     fun whenSomeRatesAreMissing_ZeroValuesForMissingRates() = runTest {
         currenciesRepository.sendCurrencies(currenciesTestData)
+        currenciesRepository.setSelectedCurrency("USD")
         ratesRepository.sendExchangeRates(
             listOf(
                 ExchangeRate("USD", "EUR", 0.8),
@@ -119,7 +127,7 @@ class GetConvertedCurrenciesUseCaseTest {
             )
         )
         val convertedCurrencies =
-            useCase(amount = 100.0, selectedCurrency = Currency("USD", "US Dollar"))
+            useCase(amount = 100.0)
         assertTrue { convertedCurrencies.first().any { it.to.id == "JPY" && it.value == 0.0 } }
     }
 
@@ -133,9 +141,10 @@ class GetConvertedCurrenciesUseCaseTest {
             )
         )
         val selectedCurrency = Currency("INR", "Indian Rupee")
-        useCase(amount = 100.0, selectedCurrency = selectedCurrency).catch {
+        currenciesRepository.setSelectedCurrency(selectedCurrency.id)
+        useCase(amount = 100.0).catch {
             assertTrue(it is IllegalStateException)
-        }.collect{
+        }.collect {
 
         }
     }

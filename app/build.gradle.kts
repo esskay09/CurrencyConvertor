@@ -55,10 +55,7 @@ android {
 dependencies {
 
     implementation(projects.core.designsystem)
-
-    //to test
-
-    implementation(projects.core.network)
+    implementation(projects.feature.conversion)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3.adaptive)

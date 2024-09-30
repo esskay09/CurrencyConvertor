@@ -11,7 +11,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             pluginManager.apply {
-                apply("currencyconvertor.android.library")
+                apply("example.currencyconvertor.library")
                 apply("currencyconvertor.hilt")
                 apply("org.jetbrains.kotlin.plugin.serialization")
             }
@@ -20,7 +20,6 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
           }
 
             dependencies {
-                add("implementation", project(":core:ui"))
                 add("implementation", project(":core:designsystem"))
 
                 add("implementation", libs.findLibrary("androidx.hilt.navigation.compose").get())

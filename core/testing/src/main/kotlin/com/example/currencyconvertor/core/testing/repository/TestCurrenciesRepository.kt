@@ -7,6 +7,8 @@ import com.example.currencyconvertor.core.model.Currency
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 
 
 class TestCurrenciesRepository : CurrenciesRepository {
@@ -17,10 +19,15 @@ class TestCurrenciesRepository : CurrenciesRepository {
     private val selectedBaseCurrencyFlow: MutableSharedFlow<String> =
         MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
-    override val currencies: Flow<List<Currency>>
-        get() = currenciesFlow
+    private val selectedCurrencyFlow: MutableSharedFlow<Currency?> =
+        MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+
+
+    override val currencies: Flow<List<Currency>> = currenciesFlow
 
     override val selectedBaseCurrency: Flow<String> = selectedBaseCurrencyFlow
+
+    override val selectedCurrency: Flow<Currency?> = selectedCurrencyFlow
 
     fun sendCurrencies(currencies: List<Currency>) {
         currenciesFlow.tryEmit(currencies)
@@ -29,6 +36,15 @@ class TestCurrenciesRepository : CurrenciesRepository {
     fun setSelectedBaseCurrency(id: String) {
         selectedBaseCurrencyFlow.tryEmit(id)
     }
+
+    suspend fun setSelectedCurrency(currency: Currency) {
+        selectedCurrencyFlow.tryEmit(currency)
+    }
+
+    override suspend fun setSelectedCurrency(id: String) {
+        selectedCurrencyFlow.tryEmit(currencies.firstOrNull()?.firstOrNull  { it.id == id })
+    }
+
 
     init {
         setSelectedBaseCurrency(Constants.DEFAULT_BASE_CURRENCY)

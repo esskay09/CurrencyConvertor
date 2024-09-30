@@ -11,6 +11,7 @@ import com.example.currencyconvertor.core.datastore.CurrencyPreferencesDataSourc
 import com.example.currencyconvertor.core.model.Currency
 import com.example.currencyconvertor.core.network.CurrencyNetworkDataSource
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -24,6 +25,17 @@ class DefaultCurrenciesRepository @Inject constructor(
         currencyDao.getAllCurrencies().map { it.map(CurrencyEntity::asExternalModel) }
 
     override val selectedBaseCurrency: Flow<String> = preferencesDataSource.selectedBaseCurrencyId
+
+    override val selectedCurrency: Flow<Currency?> = combine(
+        preferencesDataSource.selectedCurrencyId,
+        currencies
+    ) { selectedCurrencyId, currencies ->
+        currencies.find { it.id == selectedCurrencyId }
+    }
+
+    override suspend fun setSelectedCurrency(currencyId: String) {
+        preferencesDataSource.updateSelectedCurrencyId(currencyId)
+    }
 
     override suspend fun syncWith(synchronizer: Synchronizer): Boolean =
         synchronizer.changeListSync(
