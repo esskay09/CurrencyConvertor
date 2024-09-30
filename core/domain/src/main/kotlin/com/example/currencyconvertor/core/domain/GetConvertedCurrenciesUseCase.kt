@@ -24,11 +24,14 @@ class GetConvertedCurrenciesUseCase @Inject constructor(
         currenciesRepository.selectedCurrency
     ) { currencies, exchangeRates, baseCurrencyId, selectedCurrency ->
 
-        if (currencies.isEmpty() || baseCurrencyId.isEmpty() || selectedCurrency == null) return@combine emptyList()
+        if (currencies.isEmpty() || baseCurrencyId.isEmpty() ) return@combine emptyList()
 
-        if (exchangeRates.isEmpty()) return@combine emptyConvertedList(
+        if (exchangeRates.isEmpty() || selectedCurrency == null) return@combine emptyConvertedList(
             currencies,
-            selectedCurrency
+            Currency(
+                id = baseCurrencyId,
+                name = ""
+            )
         )
 
         val exchangeRatesMap = buildExchangeRateMap(exchangeRates, baseCurrencyId)

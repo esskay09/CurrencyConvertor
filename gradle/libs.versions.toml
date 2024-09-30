@@ -26,6 +26,7 @@ kotlinxDatetime = "0.5.0"
 kotlinxSerializationJson = "1.6.3"
 ksp = "2.0.20-1.0.24"
 ktor-client = "2.3.12"
+moduleGraph = "2.5.0"
 protobuf = "4.26.1"
 protobufPlugin = "0.9.4"
 robolectric = "4.12.2"
@@ -117,21 +118,16 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+module-graph = { id = "com.jraska.module.graph.assertion", version.ref = "moduleGraph" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 room = { id = "androidx.room", version.ref = "room" }
 
 # Plugins defined by this project
 currencyconvertor-application = { id = "example.currencyconvertor.application", version = "unspecified" }
 currencyconvertor-application-compose = { id = "example.currencyconvertor.application.compose", version = "unspecified" }
-currencyconvertor-application-firebase = { id = "example.currencyconvertor.application.firebase", version = "unspecified" }
-currencyconvertor-application-flavors = { id = "example.currencyconvertor.application.flavors", version = "unspecified" }
-currencyconvertor-application-jacoco = { id = "example.currencyconvertor.application.jacoco", version = "unspecified" }
 currencyconvertor-feature = { id = "example.currencyconvertor.feature", version = "unspecified" }
 currencyconvertor-library = { id = "example.currencyconvertor.library", version = "unspecified" }
 currencyconvertor-library-compose = { id = "example.currencyconvertor.library.compose", version = "unspecified" }
-currencyconvertor-library-jacoco = { id = "example.currencyconvertor.library.jacoco", version = "unspecified" }
-currencyconvertor-lint = { id = "example.currencyconvertor.lint", version = "unspecified" }
 currencyconvertor-room = { id = "example.currencyconvertor.room", version = "unspecified" }
-currencyconvertor-test = { id = "example.currencyconvertor.test", version = "unspecified" }
 currencyconvertor-hilt = { id = "currencyconvertor.hilt", version = "unspecified" }
 currencyconvertor-jvm-library = { id = "currencyconvertor.jvm.library", version = "unspecified" }

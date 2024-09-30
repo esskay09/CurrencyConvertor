@@ -1,0 +1,5 @@
+<resources>
+    <string name="sync_work_notification_title">Currency Convertor</string>
+    <string name="sync_work_notification_channel_name">Sync</string>
+    <string name="sync_work_notification_channel_description">Background tasks Currency Convertor</string>
+</resources>

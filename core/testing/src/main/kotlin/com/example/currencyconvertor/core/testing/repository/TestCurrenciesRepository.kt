@@ -37,7 +37,7 @@ class TestCurrenciesRepository : CurrenciesRepository {
         selectedBaseCurrencyFlow.tryEmit(id)
     }
 
-    suspend fun setSelectedCurrency(currency: Currency) {
+    fun setSelectedCurrency(currency: Currency) {
         selectedCurrencyFlow.tryEmit(currency)
     }
 

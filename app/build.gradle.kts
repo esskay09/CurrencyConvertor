@@ -56,6 +56,7 @@ dependencies {
 
     implementation(projects.core.designsystem)
     implementation(projects.feature.conversion)
+    implementation(projects.sync.work)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3.adaptive)

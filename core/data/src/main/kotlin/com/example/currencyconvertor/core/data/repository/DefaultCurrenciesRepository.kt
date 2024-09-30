@@ -1,5 +1,6 @@
 package com.example.currencyconvertor.core.data.repository
 
+import android.util.Log
 import com.example.currencyconvertor.core.data.NetworkConstants
 import com.example.currencyconvertor.core.data.Synchronizer
 import com.example.currencyconvertor.core.data.changeListSync
@@ -10,10 +11,14 @@ import com.example.currencyconvertor.core.database.model.asExternalModel
 import com.example.currencyconvertor.core.datastore.CurrencyPreferencesDataSource
 import com.example.currencyconvertor.core.model.Currency
 import com.example.currencyconvertor.core.network.CurrencyNetworkDataSource
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import kotlinx.datetime.LocalDateTime
 import javax.inject.Inject
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 class DefaultCurrenciesRepository @Inject constructor(
     private val currencyDao: CurrencyDao,
@@ -22,7 +27,7 @@ class DefaultCurrenciesRepository @Inject constructor(
 ) : CurrenciesRepository {
 
     override val currencies: Flow<List<Currency>> =
-        currencyDao.getAllCurrencies().map { it.map(CurrencyEntity::asExternalModel) }
+        currencyDao.getAllCurrencies().map { it.map(CurrencyEntity::asExternalModel).sortedBy { it.name } }
 
     override val selectedBaseCurrency: Flow<String> = preferencesDataSource.selectedBaseCurrencyId
 

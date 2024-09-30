@@ -8,6 +8,8 @@ import com.example.currencyconvertor.core.model.ExchangeRate
 import com.example.currencyconvertor.core.testing.repository.TestCurrenciesRepository
 import com.example.currencyconvertor.core.testing.repository.TestExchangeRatesRepository
 import com.example.currencyconvertor.core.testing.util.MainDispatcherRule
+import com.example.currencyconvertor.core.testing.util.TestNetworkMonitor
+import com.example.currencyconvertor.core.testing.util.TestSyncManager
 import com.example.currencyconvertor.feature.conversion.ConversionViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -19,6 +21,8 @@ import org.junit.Test
 import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 
 class ConversionViewModelTest {
@@ -28,6 +32,8 @@ class ConversionViewModelTest {
 
     private val currenciesRepository = TestCurrenciesRepository()
     private val ratesRepository = TestExchangeRatesRepository()
+    private val syncManger = TestSyncManager()
+    private val networkMonitor = TestNetworkMonitor()
 
     private lateinit var useCase: GetConvertedCurrenciesUseCase
 
@@ -43,6 +49,8 @@ class ConversionViewModelTest {
             savedStateHandle = SavedStateHandle(),
             currenciesRepository = currenciesRepository,
             getConvertedCurrenciesUseCase = useCase,
+            syncManager = syncManger,
+            networkMonitor = networkMonitor,
         )
     }
 
@@ -131,6 +139,31 @@ class ConversionViewModelTest {
 
         assertConvertedCurrenciesEqual(expected, state.convertedCurrencies)
 
+        collectJob.cancel()
+    }
+
+    @Test
+    fun uiState_whenSyncManagerSyncing_reflectSyncingState() = runTest {
+        val collectJob =
+            launch(UnconfinedTestDispatcher()) { viewModel.isSyncing.collect() }
+
+        syncManger.setSyncing(true)
+
+        val state = viewModel.isSyncing.value
+        assertEquals(true, state)
+
+        collectJob.cancel()
+    }
+
+    @Test
+    fun uiState_whenNetworkConnected_reflectNetworkState() = runTest {
+        val collectJob =
+            launch(UnconfinedTestDispatcher()) { viewModel.isOnline.collect() }
+
+        networkMonitor.setConnected(false)
+        assertFalse(viewModel.isOnline.value)
+        networkMonitor.setConnected(true)
+        assertTrue(viewModel.isOnline.value)
         collectJob.cancel()
     }
 }

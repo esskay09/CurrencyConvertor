@@ -40,6 +40,17 @@ class GetConvertedCurrenciesUseCaseTest {
     }
 
     @Test
+    fun whenNoCurrencySelected_ListWithZeroValuesIsReturned() = runTest {
+        currenciesRepository.sendCurrencies(currenciesTestData)
+        ratesRepository.sendExchangeRates(exchangeRatesTestData)
+        currenciesRepository.setSelectedCurrency("")
+        val convertedCurrencies =
+            useCase(amount = 1.0)
+        assertTrue { convertedCurrencies.first().isNotEmpty() }
+        assertTrue(convertedCurrencies.first().all { it.value == 0.0 })
+    }
+
+    @Test
     fun whenNoRates_CurrencyListWithZeroValuesIsReturned() = runTest {
         currenciesRepository.sendCurrencies(currenciesTestData)
         ratesRepository.sendExchangeRates(emptyList())
