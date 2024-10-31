@@ -10,8 +10,8 @@ import android.net.NetworkRequest.Builder
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import androidx.core.content.getSystemService
-import com.example.currencyconvertor.core.network.ConvertorDispatchers.IO
-import com.example.currencyconvertor.core.network.Dispatcher
+import com.example.currencyconvertor.core.common.network.ConvertorDispatchers.IO
+import com.example.currencyconvertor.core.common.network.Dispatcher
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose

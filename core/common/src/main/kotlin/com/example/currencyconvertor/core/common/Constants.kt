@@ -1,4 +1,4 @@
-package com.example.currencyconvertor.core
+package com.example.currencyconvertor.core.common
 
 object Constants {
 

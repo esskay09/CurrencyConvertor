@@ -1,4 +1,4 @@
-package com.example.currencyconvertor.core.result
+package com.example.currencyconvertor.core.common.result
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

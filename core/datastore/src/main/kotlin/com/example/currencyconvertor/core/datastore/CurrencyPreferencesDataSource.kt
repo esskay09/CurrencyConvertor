@@ -2,7 +2,7 @@ package com.example.currencyconvertor.core.datastore
 
 import android.util.Log
 import androidx.datastore.core.DataStore
-import com.example.currencyconvertor.core.Constants
+import com.example.currencyconvertor.core.common.Constants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map

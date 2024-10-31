@@ -6,9 +6,9 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
 import com.example.currencyconvertor.core.datastore.PreferencesProtoModel
 import com.example.currencyconvertor.core.datastore.PreferencesSerializer
-import com.example.currencyconvertor.core.network.ConvertorDispatchers.IO
-import com.example.currencyconvertor.core.network.Dispatcher
-import com.example.currencyconvertor.core.network.di.ApplicationScope
+import com.example.currencyconvertor.core.common.network.ConvertorDispatchers.IO
+import com.example.currencyconvertor.core.common.network.Dispatcher
+import com.example.currencyconvertor.core.common.network.di.ApplicationScope
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

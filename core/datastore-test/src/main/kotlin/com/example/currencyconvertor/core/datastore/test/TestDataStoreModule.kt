@@ -4,7 +4,7 @@ import androidx.datastore.core.DataStore
 import com.example.currencyconvertor.core.datastore.PreferencesProtoModel
 import com.example.currencyconvertor.core.datastore.PreferencesSerializer
 import com.example.currencyconvertor.core.datastore.di.DataStoreModule
-import com.example.currencyconvertor.core.network.di.ApplicationScope
+import com.example.currencyconvertor.core.common.network.di.ApplicationScope
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent

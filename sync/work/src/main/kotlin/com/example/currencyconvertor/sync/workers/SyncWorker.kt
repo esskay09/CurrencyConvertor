@@ -12,8 +12,8 @@ import com.example.currencyconvertor.core.data.repository.CurrenciesRepository
 import com.example.currencyconvertor.core.data.repository.ExchangeRatesRepository
 import com.example.currencyconvertor.core.datastore.CurrencyPreferencesDataSource
 import com.example.currencyconvertor.core.datastore.Preferences
-import com.example.currencyconvertor.core.network.ConvertorDispatchers.IO
-import com.example.currencyconvertor.core.network.Dispatcher
+import com.example.currencyconvertor.core.common.network.ConvertorDispatchers.IO
+import com.example.currencyconvertor.core.common.network.Dispatcher
 import com.example.currencyconvertor.sync.initializers.SyncConstraints
 import com.example.currencyconvertor.sync.initializers.syncForegroundInfo
 import dagger.assisted.Assisted

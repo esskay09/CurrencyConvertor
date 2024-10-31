@@ -1,9 +1,9 @@
 
-package com.example.currencyconvertor.core.network.di
+package com.example.currencyconvertor.core.common.network.di
 
-import com.example.currencyconvertor.core.network.Dispatcher
-import com.example.currencyconvertor.core.network.ConvertorDispatchers.Default
-import com.example.currencyconvertor.core.network.ConvertorDispatchers.IO
+import com.example.currencyconvertor.core.common.network.Dispatcher
+import com.example.currencyconvertor.core.common.network.ConvertorDispatchers.Default
+import com.example.currencyconvertor.core.common.network.ConvertorDispatchers.IO
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

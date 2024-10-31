@@ -1,6 +1,7 @@
 package com.example.currencyconvertor.core.network
 
-import com.example.currencyconvertor.core.network.ConvertorDispatchers.IO
+import com.example.currencyconvertor.core.common.network.ConvertorDispatchers.IO
+import com.example.currencyconvertor.core.common.network.Dispatcher
 import com.example.currencyconvertor.core.network.model.ExchangeRatesNetwork
 import com.example.currencyconvertor.core.network.samples.currenciesJson
 import com.example.currencyconvertor.core.network.samples.exchangeRatesJson

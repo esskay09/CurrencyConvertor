@@ -1,13 +1,12 @@
 package com.example.currencyconvertor.core.testing.repository
 
-import com.example.currencyconvertor.core.Constants
+import com.example.currencyconvertor.core.common.Constants
 import com.example.currencyconvertor.core.data.Synchronizer
 import com.example.currencyconvertor.core.data.repository.CurrenciesRepository
 import com.example.currencyconvertor.core.model.Currency
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 
 

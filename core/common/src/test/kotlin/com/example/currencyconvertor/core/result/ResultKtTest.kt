@@ -1,6 +1,8 @@
 package com.example.currencyconvertor.core.result
 
 import app.cash.turbine.test
+import com.example.currencyconvertor.core.common.result.Result
+import com.example.currencyconvertor.core.common.result.asResult
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runTest
 import org.junit.Test

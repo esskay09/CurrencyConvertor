@@ -1,7 +1,7 @@
 package com.example.currencyconvertor.core.datastore
 
 import app.cash.turbine.test
-import com.example.currencyconvertor.core.Constants
+import com.example.currencyconvertor.core.common.Constants
 import com.example.currencyconvertor.core.datastore.test.testPreferencesDataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope

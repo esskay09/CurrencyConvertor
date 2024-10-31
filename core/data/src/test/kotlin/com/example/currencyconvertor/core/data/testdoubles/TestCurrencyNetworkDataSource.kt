@@ -2,9 +2,9 @@ package com.example.currencyconvertor.core.data.testdoubles
 
 import com.example.currencyconvertor.core.data.testdoubles.samples.currenciesJson
 import com.example.currencyconvertor.core.data.testdoubles.samples.exchangeRatesJson
-import com.example.currencyconvertor.core.network.ConvertorDispatchers.IO
+import com.example.currencyconvertor.core.common.network.ConvertorDispatchers.IO
 import com.example.currencyconvertor.core.network.CurrencyNetworkDataSource
-import com.example.currencyconvertor.core.network.Dispatcher
+import com.example.currencyconvertor.core.common.network.Dispatcher
 import com.example.currencyconvertor.core.network.model.ExchangeRatesNetwork
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext

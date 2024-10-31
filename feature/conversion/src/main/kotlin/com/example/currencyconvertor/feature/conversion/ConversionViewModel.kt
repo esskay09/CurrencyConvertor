@@ -9,8 +9,8 @@ import com.example.currencyconvertor.core.data.util.SyncManager
 import com.example.currencyconvertor.core.domain.GetConvertedCurrenciesUseCase
 import com.example.currencyconvertor.core.model.ConvertedCurrency
 import com.example.currencyconvertor.core.model.Currency
-import com.example.currencyconvertor.core.result.Result
-import com.example.currencyconvertor.core.result.asResult
+import com.example.currencyconvertor.core.common.result.Result
+import com.example.currencyconvertor.core.common.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted

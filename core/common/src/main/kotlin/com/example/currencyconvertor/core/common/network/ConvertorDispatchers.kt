@@ -1,4 +1,4 @@
-package com.example.currencyconvertor.core.network
+package com.example.currencyconvertor.core.common.network
 
 import javax.inject.Qualifier
 import kotlin.annotation.AnnotationRetention.RUNTIME
